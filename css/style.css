@@ -26,7 +26,12 @@ th{
 	margin-bottom: 50px;
 }
 
-button[name="start"]{
+/*button[name="start"]{
+	margin-top: 30px;
+	margin-bottom: 40px;
+}*/
+
+.row.buttons{
 	margin-top: 30px;
 	margin-bottom: 30px;
 }

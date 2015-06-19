@@ -9,6 +9,9 @@ h3 {
 	margin-top: 0px;
 }
 
+p {
+	word-wrap: break-word;
+}
 
 .log{
 

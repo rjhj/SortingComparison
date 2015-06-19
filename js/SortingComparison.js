@@ -47,7 +47,7 @@ function bubbleSort(listOrig){
 function createList(numberOfElements, smallestElement, largestElement){
 	var list = []
 	for(var i = 0; i < numberOfElements; i++){
-		list.push(Math.floor((Math.random()*largestElement+smallestElement)))
+		list.push(Math.floor((Math.random()*(largestElement+1-smallestElement)+smallestElement)))
 	}
 	return list;
 }

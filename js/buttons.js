@@ -9,6 +9,6 @@ $("button[name='start']").click(function(){
 
 	$("p[class='log']").html("<p>Created lists:</p>");
 	for(var i = 0; i<lists.length; i++){
-		$("p[class='log']").append("<p> " + i + ". " + lists[i] +"</p>");
+		$("p[class='log']").append("<p> List " + (i+1) + ": " + lists[i] +"</p>");
 	}
 });

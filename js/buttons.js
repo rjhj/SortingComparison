@@ -1,7 +1,7 @@
 
 $("button[name='start']").click(function(){
 
-	//getting need variables
+	//getting required variables
 	var numberOfLists = parseInt($("#range1").text());
 	var numberOfElements = parseInt($("#range2").text());
 	var smallestElement = parseInt($("#range3").text());
@@ -27,36 +27,34 @@ $("button[name='start']").click(function(){
 		$("p[class='log']").append("<p> List " + (i+1) + ": " + lists[i] +"</p>");
 	}
 
-	// sort lists with bubbleSort
-	for(var i = 0; i<lists.length; i++){
+	// sort lists with algs
+	for(var iAlg = 0; iAlg < algsList.length;iAlg++){
+		for(var i = 0; i<lists.length; i++){
 			timeStart = performance.now();
-			sortedBubble.push(bubbleSort(lists[i]));
+			algsList[iAlg].sortedLists.push(algsList[iAlg].alg(lists[i]));
 			timeEnd = performance.now();
-			timesBubble.push(timeEnd - timeStart);
+			algsList[iAlg].sortingTimes.push(timeEnd - timeStart);
 		}
-
-	// sort lists with sortByFindingSmallest
-	for(var i = 0; i<lists.length; i++){
-			timeStart = performance.now();
-			sortedSmallest.push(sortByFindingSmallest(lists[i]));
-			timeEnd = performance.now();
-			timesSmallest.push(timeEnd - timeStart);
-		}
-	
-	
-	// write to log
-	$("p[class='log']").append("<br><p> Lists sorted by BubbleSort:</p>");
-	for(var i = 0; i<lists.length; i++){
-		$("p[class='log']").append("<p> List " + (i+1) + ": " 
-			+ sortedBubble[i] +" t = " + timesBubble[i] + "</p>");
 	}
 
+	
 	// write to log
-	$("p[class='log']").append("<br><p> Lists sorted by FindSmallest:</p>");
-	for(var i = 0; i<lists.length; i++){
-		$("p[class='log']").append("<p> List " + (i+1) + ": " 
-			+ sortedSmallest[i] +" t = " + timesSmallest[i] + "</p>");
+	for(var iAlg = 0; iAlg < algsList.length;iAlg++){
+		$("p[class='log']").append("<br><p> Lists sorted by "+ algsList[iAlg].name +"</p>");
+		for(var i = 0; i<lists.length; i++){
+			$("p[class='log']").append("<p> List " + (i+1) + ": " 
+				+ algsList[iAlg].sortedLists[i] +" t = " + algsList[iAlg].sortingTimes[i] + "</p>");
+		}
 	}
+
+
+	// calculate min, max and average times:
+	for(var iAlg = 0; iAlg < algsList.length;iAlg++){
+		algsList[iAlg].fastestTime = Math.min.apply(Math, algsList[iAlg].sortingTimes);
+		algsList[iAlg].slowestTime = Math.max.apply(Math, algsList[iAlg].sortingTimes);
+		algsList[iAlg].average = average(algsList[iAlg].sortingTimes);
+	}
+	
 
 	// write to table
 	//alert(Math.max.apply(Math, [2,3,4,5,2,]));
@@ -67,12 +65,11 @@ $("button[name='start']").click(function(){
 });
 
 
-function sorter(alg, list){}
+//function sorter(alg, list){}
 
 function average(list){
 	sum = 0;
 	for(e in list){
-		console.log(list[e]);
 		sum = sum + list[e];
 	}
 	return sum/list.length;

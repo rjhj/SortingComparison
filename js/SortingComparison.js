@@ -3,10 +3,13 @@ function algorithm(name, alg){
 	this.alg = alg;
 	this.sortedLists = [];
 	this.sortingTimes = [];
+	this.slowestTime = 0;
+	this.fastestTime = 0;
+	this.averageTime = 0;
 }
 
 
-function sortByFindingSmallest(listOrig){
+function selectionAlgorithm(listOrig){
 	var list = listOrig.slice();
 	var orderedList = [];
 
@@ -72,7 +75,7 @@ function createLists(numberOfLists,numberOfElements, smallestElement, largestEle
 // create instances of algorithms
 var algsList = []
 algsList.push(new algorithm("bubbleSort", bubbleSort));
-algsList.push(new algorithm("bySmallest", sortByFindingSmallest));
+algsList.push(new algorithm("selectionAlgorithm", selectionAlgorithm));
 
 
 

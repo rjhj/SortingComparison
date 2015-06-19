@@ -13,6 +13,10 @@ p {
 	word-wrap: break-word;
 }
 
+th{
+	text-align: center;
+}
+
 .log{
 
 	text-align: left;
@@ -24,4 +28,5 @@ p {
 
 button[name="start"]{
 	margin-top: 30px;
+	margin-bottom: 30px;
 }

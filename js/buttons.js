@@ -19,6 +19,8 @@ $("button[name='start']").click(function(){
 	var timeStart = 0;
 	var timeEnd = 0;
 
+	var results = [];
+
 	// prints lists that need to be sorted
 	$("p[class='log']").html("<p>Created lists:</p>");
 	for(var i = 0; i<lists.length; i++){
@@ -41,16 +43,34 @@ $("button[name='start']").click(function(){
 			timesSmallest.push(timeEnd - timeStart);
 		}
 	
+	
+	// write to log
 	$("p[class='log']").append("<br><p> Lists sorted by BubbleSort:</p>");
 	for(var i = 0; i<lists.length; i++){
 		$("p[class='log']").append("<p> List " + (i+1) + ": " 
 			+ sortedBubble[i] +" t = " + timesBubble[i] + "</p>");
 	}
 
+	// write to log
 	$("p[class='log']").append("<br><p> Lists sorted by FindSmallest:</p>");
 	for(var i = 0; i<lists.length; i++){
 		$("p[class='log']").append("<p> List " + (i+1) + ": " 
 			+ sortedSmallest[i] +" t = " + timesSmallest[i] + "</p>");
 	}
 
+	// write to table
+	//alert(Math.max.apply(Math, [2,3,4,5,2,]));
+	//alert(Math.min.apply(Math, [2,3,4,5,2,]));
+	alert(average([2,9,1,0,0,0]));
+
+
 });
+
+function average(list){
+	sum = 0;
+	for(e in list){
+		console.log(list[e]);
+		sum = sum + list[e];
+	}
+	return sum/list.length;
+}

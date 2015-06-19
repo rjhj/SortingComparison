@@ -14,6 +14,8 @@ $("button[name='clear']").click(function(){
 
 	// clear table
 	$("td").html("");
+	
+	$("button[name='start']").prop('disabled', false);
 });
 
 $("button[name='defaults']").click(function(){
@@ -31,6 +33,7 @@ $("button[name='defaults']").click(function(){
 
 $("button[name='start']").click(function(){
 
+	$("button[name='start']").prop('disabled', true);
 	//getting required variables
 	var numberOfLists = parseInt($("#range1").text());
 	var numberOfElements = parseInt($("#range2").text());

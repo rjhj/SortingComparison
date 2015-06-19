@@ -80,4 +80,4 @@ var list = [6,4,3,2,4,3,3,4,5,5,5,5,6,2,1,3,4,7,9,1,9,3,7,7,1,2,3,3,3,9,
 
 //alert(bubbleSort(list));
 
-alert(createLists(5,5,0,100));
+//alert(createLists(5,5,0,100));

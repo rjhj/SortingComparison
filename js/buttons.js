@@ -54,8 +54,10 @@ $("button[name='start']").click(function(){
 		algsList[iAlg].slowestTime = Math.max.apply(Math, algsList[iAlg].sortingTimes);
 		algsList[iAlg].averageTime = average(algsList[iAlg].sortingTimes);
 	}
-	
 
+	bubbleSortObjectsByAvgTime(algsList);
+	
+	// add values to results table
 	for(var iAlg = 0; iAlg < algsList.length;iAlg++){
 		// rank (1., 2.,..)
 		$( "td:eq( "+ iAlg*5 +" )" ).html( iAlg+1);
@@ -80,6 +82,23 @@ function average(list){
 	return sum/list.length;
 }
 
-function orderByfastestAverage(algsList){
 
+function bubbleSortObjectsByAvgTime(list){
+	var unsorted = true;
+	var tmp = 0;
+    var noChanges = true;
+	while (unsorted) {
+		noChanges = true;
+		for(var i = 0; i < list.length-1; i++){
+			if (list[i].averageTime > list[i+1].averageTime){
+				tmp = list[i];
+				list[i] = list[i+1];
+				list[i+1] = tmp;
+				noChanges = false;
+			}
+		}
+		if (noChanges){
+			unsorted = false;
+		}
+	}
 }

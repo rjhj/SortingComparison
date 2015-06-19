@@ -43,7 +43,7 @@ function bubbleSort(listOrig){
 				tmp = list[i];
 				list[i] = list[i+1];
 				list[i+1] = tmp;
-				noChanges = false
+				noChanges = false;
 			}
 		}
 		if (noChanges){
@@ -74,8 +74,9 @@ function createLists(numberOfLists,numberOfElements, smallestElement, largestEle
 
 // create instances of algorithms
 var algsList = []
-algsList.push(new algorithm("bubbleSort", bubbleSort));
 algsList.push(new algorithm("selectionAlgorithm", selectionAlgorithm));
+algsList.push(new algorithm("bubbleSort", bubbleSort));
+
 
 
 

@@ -11,6 +11,8 @@ function showValue(newValue, sliderNumber)
 
 
 $( document ).ready(function() {
+
+        $("button[name='start']").prop('disabled', false);
  
         //if max >= min --> max = min+1
         $("#slider3").change(function(){

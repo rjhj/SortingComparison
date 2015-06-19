@@ -52,20 +52,25 @@ $("button[name='start']").click(function(){
 	for(var iAlg = 0; iAlg < algsList.length;iAlg++){
 		algsList[iAlg].fastestTime = Math.min.apply(Math, algsList[iAlg].sortingTimes);
 		algsList[iAlg].slowestTime = Math.max.apply(Math, algsList[iAlg].sortingTimes);
-		algsList[iAlg].average = average(algsList[iAlg].sortingTimes);
+		algsList[iAlg].averageTime = average(algsList[iAlg].sortingTimes);
 	}
 	
 
-	// write to table
-	//alert(Math.max.apply(Math, [2,3,4,5,2,]));
-	//alert(Math.min.apply(Math, [2,3,4,5,2,]));
-	//alert(average([2,9,1,0,0,0]));
-
+	for(var iAlg = 0; iAlg < algsList.length;iAlg++){
+		// rank (1., 2.,..)
+		$( "td:eq( "+ iAlg*5 +" )" ).html( iAlg+1);
+		// name 
+		$( "td:eq( "+ (iAlg*5+1)+" )" ).html( algsList[iAlg].name);
+		// fastest
+		$( "td:eq( "+ (iAlg*5+2)+" )" ).html( algsList[iAlg].fastestTime);
+		// slowest
+		$( "td:eq( "+ (iAlg*5+3)+" )" ).html( algsList[iAlg].slowestTime);
+		// average
+		$( "td:eq( "+ (iAlg*5+4)+" )" ).html( algsList[iAlg].averageTime);
+	}
 
 });
 
-
-//function sorter(alg, list){}
 
 function average(list){
 	sum = 0;
@@ -73,4 +78,8 @@ function average(list){
 		sum = sum + list[e];
 	}
 	return sum/list.length;
+}
+
+function orderByfastestAverage(algsList){
+
 }

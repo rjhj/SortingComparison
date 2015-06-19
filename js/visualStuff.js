@@ -8,7 +8,7 @@ function showValue(newValue, sliderNumber)
 $( document ).ready(function() {
  
         //if max >= min --> max = min+1
-        $("#slider3").click(function(){
+        $("#slider3").change(function(){
         var min = parseInt($("#range3").text());
         var max = parseInt($("#range4").text());
         if (min >= max){
@@ -18,7 +18,7 @@ $( document ).ready(function() {
          });
 
         //if min >= max --> min = max-1
-        $("#slider4").click(function(){
+        $("#slider4").change(function(){
         var min = parseInt($("#range3").text());
         var max = parseInt($("#range4").text());
         if (max <= min){

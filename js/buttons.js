@@ -14,8 +14,6 @@ $("button[name='clear']").click(function(){
 
 	// clear table
 	$("td").html("");
-
-
 });
 
 $("button[name='defaults']").click(function(){

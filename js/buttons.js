@@ -9,13 +9,24 @@ $("button[name='clear']").click(function(){
 		algsList[iAlg].averageTime = 0;
 	}
 
-
 	// clear log
 	$("p[class='log']").html("");
 
 	// clear table
 	$("td").html("");
 
+
+});
+
+$("button[name='defaults']").click(function(){
+	
+	// slider default values
+	for(var i = 0; i < 4; i++){
+     document.getElementById("slider"+(i+1)).value = rangeValue[i];
+     document.getElementById("range"+(i+1)).innerHTML = rangeValue[i];
+     }
+     
+ 
 
 });
 

@@ -31,6 +31,10 @@ th{
 	margin-bottom: 40px;
 }*/
 
+button {
+	margin: 5px;
+}
+
 .row.buttons{
 	margin-top: 30px;
 	margin-bottom: 30px;

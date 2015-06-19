@@ -1,3 +1,8 @@
+var rangeMin = [1, 2, 0, 1];
+var rangeMax = [500, 1000, 9999, 10000];
+var rangeValue = [10, 20, 0, 500];
+
+
 function showValue(newValue, sliderNumber)
 {
   document.getElementById("range"+sliderNumber).innerHTML=newValue;

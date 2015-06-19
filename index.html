@@ -30,10 +30,10 @@
 -->
 			<div class="row">
 				<div class="col-md-5">
-					<h3>How many lists? <small>(0-500)</small></h3>
+					<h3>How many lists? <small>(1-500)</small></h3>
 				</div>
 				<div class="col-md-7">
-					<input type="range" id="slider1" min="0" max="500" value="10" step="1" onchange="showValue(this.value, 1)"/>
+					<input type="range" id="slider1" min="1" max="500" value="10" step="1" onchange="showValue(this.value, 1)"/>
 					<span id="range1">10</span>	
 				</div>
 			</div>
@@ -48,7 +48,7 @@
 			</div>
 			<div class="row">
 				<div class="col-md-5">
-					<h3>What is the smallest element? <small>(0-9999)</small></h3>
+					<h3>What is min. value for element? <small>(0-9999)</small></h3>
 				</div>
 				<div class="col-md-7">
 					<input type="range" id="slider3" min="0" max="9999" value="0" step="1" onchange="showValue(this.value,3)"/>
@@ -57,13 +57,25 @@
 			</div>
 			<div class="row">
 				<div class="col-md-5">
-					<h3>What is the largest element? <small>(1-10000)</small></h3>
+					<h3>What is max. value for element? <small>(1-10000)</small></h3>
 				</div>
 				<div class="col-md-7">
 					<input type="range" id="slider4" min="1" max="10000" value="500" step="1" onchange="showValue(this.value,4)"/>
 					<span id="range4">500</span>
 				</div>
 			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<button name="start" type="button" class="btn btn-default btn-lg"> Start </button>
+				</div>
+			</div>
+			<div class="row log">
+				<div class="col-md-12">
+					<h4> LOG </h4>
+					<p rows="20" cols="50" class = "log">Blaa blaa blaa...</p>
+				</div>
+			</div>
+	
 
 
 	</div>
@@ -73,6 +85,7 @@
 	<script src="js/jQuery.js"></script>
 	<script src="js/visualStuff.js"></script>
 	<script src="js/SortingComparison.js"></script>
+	<script src="js/buttons.js"></script>
 
 	</body>
 </html>

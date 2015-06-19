@@ -4,16 +4,21 @@ body{
  form {
     text-align: center;
     }
-/*button[name="randomize"]{
-	
-}*/
-
 
 h3 {
 	margin-top: 0px;
+}
+
+
+.log{
+
+	text-align: left;
 }
 
 #title{
 	margin-bottom: 50px;
 }
 
+button[name="start"]{
+	margin-top: 30px;
+}

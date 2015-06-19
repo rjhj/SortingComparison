@@ -1,3 +1,24 @@
+$("button[name='clear']").click(function(){
+	
+	// clear algsList instances
+	for(var iAlg = 0; iAlg < algsList.length;iAlg++){
+		algsList[iAlg].sortedLists = [];
+		algsList[iAlg].sortingTimes = [];
+		algsList[iAlg].slowestTime = 0;
+		algsList[iAlg].fastestTime = 0;
+		algsList[iAlg].averageTime = 0;
+	}
+
+
+	// clear log
+	$("p[class='log']").html("");
+
+	// clear table
+	$("td").html("");
+
+
+});
+
 
 $("button[name='start']").click(function(){
 

@@ -59,6 +59,20 @@ function jsSort(listOrig) {
 	return list;
 }
 
+function qsort(listOrig) {
+	var a = listOrig;
+    if (a.length == 0) return [];
+ 
+    var left = [], right = [], pivot = a[0];
+ 
+    for (var i = 1; i < a.length; i++) {
+        a[i] < pivot ? left.push(a[i]) : right.push(a[i]);
+    }
+ 
+    return qsort(left).concat(pivot, qsort(right));
+}
+
+
 function createList(numberOfElements, smallestElement, largestElement){
 	var list = []
 	for(var i = 0; i < numberOfElements; i++){
@@ -82,5 +96,6 @@ var algsList = [];
 algsList.push(new algorithm("selectionAlgorithm", selectionAlgorithm));
 algsList.push(new algorithm("bubbleSort", bubbleSort));
 algsList.push(new algorithm("jsSort", jsSort));
+algsList.push(new algorithm("quickSort", qsort));
 
 

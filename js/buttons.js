@@ -61,10 +61,13 @@ $("button[name='start']").click(function(){
 	// write to table
 	//alert(Math.max.apply(Math, [2,3,4,5,2,]));
 	//alert(Math.min.apply(Math, [2,3,4,5,2,]));
-	alert(average([2,9,1,0,0,0]));
+	//alert(average([2,9,1,0,0,0]));
 
 
 });
+
+
+function sorter(alg, list){}
 
 function average(list){
 	sum = 0;

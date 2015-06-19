@@ -1,3 +1,10 @@
+function algorithm(name, alg){
+	this.name = name;
+	this.alg = alg;
+	this.sortedLists = [];
+	this.sortingTimes = [];
+}
+
 
 function sortByFindingSmallest(listOrig){
 	var list = listOrig.slice();
@@ -61,23 +68,16 @@ function createLists(numberOfLists,numberOfElements, smallestElement, largestEle
 	return lists
 }
 
+
+// create instances of algorithms
+var algsList = []
+algsList.push(new algorithm("bubbleSort", bubbleSort));
+algsList.push(new algorithm("bySmallest", sortByFindingSmallest));
+
+
+
 var list = [6,4,3,2,4,3,3,4,5,5,5,5,6,2,1,3,4,7,9,1,9,3,7,7,1,2,3,3,3,9,
 			8,5,8,3,5,2,6,3,3,2,6,7,4,4,2,2,1,3,3,2,5,6,7,3,9,8,4,5,6,3,
 			2,4,3,5,3,6,3,6,3,6,3,6,3,7,9,4,2,1,4,5,6,3,1,3,5,3,5,6,7,2,
 			9,9,6,3,5,2,6,4,6,7,3,2,5,6,8,4,2,5,6,7,3,2,5,7,8,4,2,5,6,7,
 			1,2,4,7,6,3,6,8,4,8,3,9,3,6,2,6,7,3,6,7,3,1,2,3,6,3,7,9,4,2];
-
-//var timeStart = 0;
-//var timeEnd = 0;
-
-//timeStart = performance.now();
-//alert(sortByFindingSmallest(list));
-//console.log(sortByFindingSmallest(list));
-
-//timeEnd = performance.now();
-
-//console.log(timeEnd - timeStart);
-
-//alert(bubbleSort(list));
-
-//alert(createLists(5,5,0,100));

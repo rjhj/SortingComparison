@@ -29,7 +29,7 @@ var algModel = {
 
 			["jsSort", algModel.jsSort],
 
-			["quickSort", algModel.qsort],
+			["quickSort", algModel.quickSort],
 
 	];},
 
@@ -85,7 +85,7 @@ var algModel = {
 		return list;
 	},
 
-	qsort: function(listOrig) {
+	quickSort: function(listOrig) {
 		var a = listOrig;
 	    if (a.length == 0) return [];
 	 
@@ -128,7 +128,23 @@ var sliderModel = {
 // 
 var generalModel = {
 
+	unsortedLists: [],
 
+	createList: function(numberOfElements, smallestElement, largestElement) {
+		var list = []
+		for(var i = 0; i < numberOfElements; i++){
+			list.push(Math.floor((Math.random()*(largestElement+1-smallestElement)+smallestElement)))
+		}
+		return list;
+	},
+
+	createLists: function(numberOfLists,numberOfElements, smallestElement, largestElement){
+		lists = []
+		for(var i = 0; i < numberOfLists; i++){
+			lists.push(generalModel.createList(numberOfElements, smallestElement, largestElement));
+		}
+		return lists;
+	}
 
 };
 
@@ -144,9 +160,26 @@ var octopus = {
     	viewButtons.init();
     },
 
-    start: function(){
+    start: function() {
 
-    }
+    	// Get values from sliders
+    	var numberOfLists = viewSliders.getNumberOfLists();
+    	var numberOfElements = viewSliders.getNumberOfElements();
+    	var smallestElement = viewSliders.getSmallestElement();
+    	var largestElement = viewSliders.getLargestElement();
+
+    	// Create unsorted lists
+		generalModel.unsortedLists = generalModel.createLists(numberOfLists,numberOfElements,
+			smallestElement, largestElement);
+
+		viewLog.printLists(generalModel.unsortedLists);
+
+
+    },
+
+    getUnsortedLists: function() {
+        return generalModel.unsortedLists;
+    },
 
 
 };
@@ -162,7 +195,28 @@ var viewSliders = {
 
     render: function() {
       
+    },
+
+    // returns how many lists will be created
+    getNumberOfLists: function() {
+		return parseInt($("#range1").text());
+    },
+
+	// returns how many elements will be in a list
+    getNumberOfElements: function() {
+		return parseInt($("#range2").text());
+    },
+
+	// returns the smallest possible value in a list
+    getSmallestElement: function() {
+		return parseInt($("#range3").text());
+    },
+
+	// returns the largest possible value in a list
+    getLargestElement: function() {
+		return parseInt($("#range4").text());
     }
+
 };
 
 var viewButtons = {
@@ -177,26 +231,18 @@ var viewButtons = {
     		// Disable start after being pressed
 			$("button[name='start']").prop('disabled', true);
 
-			// Get values from slider
-			var numberOfLists = parseInt($("#range1").text());
-			var numberOfElements = parseInt($("#range2").text());
-			var smallestElement = parseInt($("#range3").text());
-			var largestElement = parseInt($("#range4").text());
+			// tell octopus to start
+			octopus.start();
 
 
 
-			// create lists that need to be sorted
-			var lists = createLists(numberOfLists,numberOfElements, smallestElement, largestElement);
+			
 
-
+/*
 			var timeStart = 0;
 			var timeEnd = 0;
 
-			// prints lists that need to be sorted
-			$("p[class='log']").html("<p>Created lists:</p>");
-			for(var i = 0; i<lists.length; i++){
-				$("p[class='log']").append("<p> List " + (i+1) + ": " + lists[i] +"</p>");
-			}
+
 
 			// sort lists with algs
 			for(var iAlg = 0; iAlg < algsList.length;iAlg++){
@@ -240,7 +286,7 @@ var viewButtons = {
 				$( "td:eq( "+ (iAlg*5+3)+" )" ).html( algsList[iAlg].slowestTime);
 				// average
 				$( "td:eq( "+ (iAlg*5+4)+" )" ).html( algsList[iAlg].averageTime);
-			}
+			} */
 
 		});
 
@@ -265,11 +311,13 @@ var viewTable = {
 
 var viewLog = {
 
-    init: function() {
-    
-    },
+	// prints lists that need to be sorted
+    printLists: function(lists) {
 
-    render: function() {
+		$("p[class='log']").html("<p>Created lists:</p>");
+		for(var i = 0; i<lists.length; i++){
+			$("p[class='log']").append("<p> List " + (i+1) + ": " + lists[i] +"</p>");
+		}
       
     }
 };

@@ -1,5 +1,4 @@
 
-
 /* ====== Model ====== */
 
 // All algorithm related
@@ -50,8 +49,8 @@ var algModel = {
 				}
 			}
 
-		// removes 1 from position smallestIndex and push it
-		orderedList.push(list.splice(smallestIndex, 1));
+			// removes 1 from position smallestIndex and push it
+			orderedList.push(list.splice(smallestIndex, 1));
 		}
 
 		return orderedList;
@@ -95,9 +94,20 @@ var algModel = {
 	        a[i] < pivot ? left.push(a[i]) : right.push(a[i]);
 	    }
 	 
-	    return qsort(left).concat(pivot, qsort(right));
+	    return algModel.quickSort(left).concat(pivot, algModel.quickSort(right));
 	},
 	/*** end of all the sorting algorithms ***/
+
+	// clear algsList values
+	clearAlglist: function(algsList) {
+		for(var iAlg = 0; iAlg < algsList.length; iAlg++){
+			algsList[iAlg].sortedLists = [];
+			algsList[iAlg].sortingTimes = [];
+			algsList[iAlg].slowestTime = 0;
+			algsList[iAlg].fastestTime = 0;
+			algsList[iAlg].averageTime = 0;
+		}
+	},
 
 	// init
 	init: function(){
@@ -117,16 +127,19 @@ var algModel = {
 
 };
 
-// 
+// Things related to sliders
 var sliderModel = {
 
-
+	// Slider default values for ranges 1,2,3,4
+	rangeMin:  [1, 2, 0, 1],
+	rangeMax: [500, 1000, 9999, 10000],
+	rangeValue: [10, 20, 0, 500],
 
 };
 
 
-// 
-var generalModel = {
+// List related things
+var listModel = {
 
 	unsortedLists: [],
 
@@ -141,14 +154,67 @@ var generalModel = {
 	createLists: function(numberOfLists,numberOfElements, smallestElement, largestElement){
 		lists = []
 		for(var i = 0; i < numberOfLists; i++){
-			lists.push(generalModel.createList(numberOfElements, smallestElement, largestElement));
+			lists.push(listModel.createList(numberOfElements, smallestElement, largestElement));
 		}
 		return lists;
+	},
+
+	// sort lists and record performance
+	sortLists: function(algsList, unsortedLists){
+		var timeStart = 0;
+		var timeEnd = 0;
+
+		// sort lists with algs
+		for(var iAlg = 0; iAlg < algsList.length;iAlg++){
+			for(var i = 0; i < unsortedLists.length; i++){
+				timeStart = performance.now();
+				algsList[iAlg].sortedLists.push(algsList[iAlg].alg(unsortedLists[i]));
+				timeEnd = performance.now();
+				algsList[iAlg].sortingTimes.push(timeEnd - timeStart);
+			}
+		}
+	},
+
+	// Calculate avg time
+	averageTime: function(list){
+		sum = 0;
+		for(e in list){
+			sum = sum + list[e];
+		}
+		return sum/list.length;
+	},
+
+	// Calculate min, max and average times:
+	calculateTimes: function(algsList){
+		for(var iAlg = 0; iAlg < algsList.length;iAlg++){
+			algsList[iAlg].fastestTime = Math.min.apply(Math, algsList[iAlg].sortingTimes);
+			algsList[iAlg].slowestTime = Math.max.apply(Math, algsList[iAlg].sortingTimes);
+			algsList[iAlg].averageTime = listModel.averageTime(algsList[iAlg].sortingTimes);
+		}
+	},
+
+	// Order algList by average time using bubbleSort.
+	orderListByAverage: function(algsList){
+		var unsorted = true;
+		var tmp = 0;
+	    var noChanges = true;
+		while (unsorted) {
+			noChanges = true;
+			for(var i = 0; i < algsList.length-1; i++){
+				if (algsList[i].averageTime > algsList[i+1].averageTime){
+					tmp = algsList[i];
+					algsList[i] = algsList[i+1];
+					algsList[i+1] = tmp;
+					noChanges = false;
+				}
+			}
+			if (noChanges){
+				unsorted = false;
+			}
+		}
 	}
-
+	
 };
-
-
 
 
 /* ====== Octopus ====== */
@@ -157,6 +223,7 @@ var octopus = {
 
     init: function() {
     	algModel.init();
+    	viewSliders.init();
     	viewButtons.init();
     },
 
@@ -169,18 +236,45 @@ var octopus = {
     	var largestElement = viewSliders.getLargestElement();
 
     	// Create unsorted lists
-		generalModel.unsortedLists = generalModel.createLists(numberOfLists,numberOfElements,
+		listModel.unsortedLists = listModel.createLists(numberOfLists,numberOfElements,
 			smallestElement, largestElement);
 
-		viewLog.printLists(generalModel.unsortedLists);
+		// Write unsorted lists to log
+		viewLog.printUnsortedLists(listModel.unsortedLists);
 
+		// Sort lists
+		listModel.sortLists(algModel.algsList, listModel.unsortedLists);
+
+		// Write sorted lists to log
+		viewLog.printSortedListsAndTimes(algModel.algsList);
+
+		// Calcluate min, max, avg times
+		listModel.calculateTimes(algModel.algsList);
+
+		// Order algs by avg time
+		listModel.orderListByAverage(algModel.algsList);
+
+		// Print results to the table
+		viewTable.printValuesToTable(algModel.algsList);
 
     },
 
+ 	// Restores starting state
+    clear: function(){
+    	algModel.clearAlglist(algModel.algsList);
+    	viewLog.clear();
+    	viewTable.clear();
+    },
+
+    // Restore sliders to default
+    setSlidersToDefault: function() {
+    	viewSliders.setSliderValuesToDefault(sliderModel.rangeValue);
+    },
+
+   // Return unsorted lists
     getUnsortedLists: function() {
-        return generalModel.unsortedLists;
-    },
-
+        return listModel.unsortedLists;
+    }
 
 };
 
@@ -190,42 +284,80 @@ var octopus = {
 var viewSliders = {
 
     init: function() {
+
+    	// Create on change listeners for sliders
+    	for (var i = 1; i < 5; i++){
+	   		$("#slider"+i).change(function(ind){
+	   			return function(){
+	   				$("#range"+ind).html($("#slider"+ind).val());
+	   			};
+	   		}(i));
+   		}
+
+   		/*** Set listeners to make sure min <= max ***/
+   		    
+   	    //if max >= min --> max = min+1
+	    $("#slider3").change(function(){
+		    var min = parseInt($("#range3").text());
+		    var max = parseInt($("#range4").text());
+		    if (min >= max){
+		      document.getElementById("slider4").value = min+1;
+		      document.getElementById("range4").innerHTML = min+1;
+		    }
+	     });
+
+	    //if min >= max --> min = max-1
+	    $("#slider4").change(function(){
+		    var min = parseInt($("#range3").text());
+		    var max = parseInt($("#range4").text());
+		    if (max <= min){
+		      document.getElementById("slider3").value = max-1;
+		      document.getElementById("range3").innerHTML = max-1;
+		    }
+		});
+
     
     },
 
-    render: function() {
-      
-    },
-
-    // returns how many lists will be created
+    // Returns how many lists will be created
     getNumberOfLists: function() {
 		return parseInt($("#range1").text());
     },
 
-	// returns how many elements will be in a list
+	// Returns how many elements will be in a list
     getNumberOfElements: function() {
 		return parseInt($("#range2").text());
     },
 
-	// returns the smallest possible value in a list
+	// Returns the smallest possible value in a list
     getSmallestElement: function() {
 		return parseInt($("#range3").text());
     },
 
-	// returns the largest possible value in a list
+	// Returns the largest possible value in a list
     getLargestElement: function() {
 		return parseInt($("#range4").text());
-    }
+    },
+
+    setSliderValuesToDefault: function(rangeValue) {
+    	for(var i = 0; i < 4; i++){
+		     document.getElementById("slider"+(i+1)).value = rangeValue[i];
+		     document.getElementById("range"+(i+1)).innerHTML = rangeValue[i];
+	     }
+	}
 
 };
 
 var viewButtons = {
 
     init: function() {
-    	
-    	// Add listeners
 
-    	// Start-button
+    	// Enable start button (to avoid a rare bug where start is disabled)
+    	$("button[name='start']").prop('disabled', false);
+    	
+    	/*** Add listeners ***/
+
+    	// Start button
     	$("button[name='start']").click(function(){
 
     		// Disable start after being pressed
@@ -234,97 +366,90 @@ var viewButtons = {
 			// tell octopus to start
 			octopus.start();
 
-
-
-			
-
-/*
-			var timeStart = 0;
-			var timeEnd = 0;
-
-
-
-			// sort lists with algs
-			for(var iAlg = 0; iAlg < algsList.length;iAlg++){
-				for(var i = 0; i<lists.length; i++){
-					timeStart = performance.now();
-					algsList[iAlg].sortedLists.push(algsList[iAlg].alg(lists[i]));
-					timeEnd = performance.now();
-					algsList[iAlg].sortingTimes.push(timeEnd - timeStart);
-				}
-			}
-
-			
-			// write to log
-			for(var iAlg = 0; iAlg < algsList.length;iAlg++){
-				$("p[class='log']").append("<br><p> Lists sorted by "+ algsList[iAlg].name +"</p>");
-				for(var i = 0; i<lists.length; i++){
-					$("p[class='log']").append("<p> List " + (i+1) + ": " 
-						+ algsList[iAlg].sortedLists[i] +" t = " + algsList[iAlg].sortingTimes[i] + "</p>");
-				}
-			}
-
-
-			// calculate min, max and average times:
-			for(var iAlg = 0; iAlg < algsList.length;iAlg++){
-				algsList[iAlg].fastestTime = Math.min.apply(Math, algsList[iAlg].sortingTimes);
-				algsList[iAlg].slowestTime = Math.max.apply(Math, algsList[iAlg].sortingTimes);
-				algsList[iAlg].averageTime = average(algsList[iAlg].sortingTimes);
-			}
-
-			bubbleSortObjectsByAvgTime(algsList);
-			
-			// add values to results table
-			for(var iAlg = 0; iAlg < algsList.length;iAlg++){
-				// rank (1., 2.,..)
-				$( "td:eq( "+ iAlg*5 +" )" ).html( iAlg+1);
-				// name 
-				$( "td:eq( "+ (iAlg*5+1)+" )" ).html( algsList[iAlg].name);
-				// fastest
-				$( "td:eq( "+ (iAlg*5+2)+" )" ).html( algsList[iAlg].fastestTime);
-				// slowest
-				$( "td:eq( "+ (iAlg*5+3)+" )" ).html( algsList[iAlg].slowestTime);
-				// average
-				$( "td:eq( "+ (iAlg*5+4)+" )" ).html( algsList[iAlg].averageTime);
-			} */
-
 		});
+
+    	// Clear button
+		$("button[name='clear']").click(function(){
+
+			// Clears values
+			octopus.clear();
+			
+			// Enables start
+			$("button[name='start']").prop('disabled', false);
+		});
+
+
+		// Default sliders button
+		$("button[name='defaults']").click(function(){
+
+			octopus.setSlidersToDefault();
+     
+		});
+
+		/*** End of add listeners ***/
 
     },
 
-    render: function() {
-      
-    }
 };
 
 var viewTable = {
 
-    init: function() {
-    
+
+	printValuesToTable: function(algsList) {
+
+		// Add values to results table
+		for(var iAlg = 0; iAlg < algsList.length;iAlg++){
+			// rank (1., 2.,..)
+			$( "td:eq( "+ iAlg*5 +" )" ).html( iAlg+1);
+			// name 
+			$( "td:eq( "+ (iAlg*5+1)+" )" ).html( algsList[iAlg].name);
+			// fastest
+			$( "td:eq( "+ (iAlg*5+2)+" )" ).html( algsList[iAlg].fastestTime);
+			// slowest
+			$( "td:eq( "+ (iAlg*5+3)+" )" ).html( algsList[iAlg].slowestTime);
+			// average
+			$( "td:eq( "+ (iAlg*5+4)+" )" ).html( algsList[iAlg].averageTime);
+		}   
     },
 
-    render: function() {
-      
+    // Clear table
+    clear: function(){
+		$("td").html("");
     }
 };
 
 
 var viewLog = {
 
-	// prints lists that need to be sorted
-    printLists: function(lists) {
+	// Prints unsorted lists
+    printUnsortedLists: function(lists) {
 
 		$("p[class='log']").html("<p>Created lists:</p>");
 		for(var i = 0; i<lists.length; i++){
 			$("p[class='log']").append("<p> List " + (i+1) + ": " + lists[i] +"</p>");
 		}
       
-    }
+    },
+
+
+    // Prints sorted lists and sorting times to the log
+    printSortedListsAndTimes: function(algsList){
+
+		for(var iAlg = 0; iAlg < algsList.length;iAlg++){
+			$("p[class='log']").append("<br><p> Lists sorted by "+ algsList[iAlg].name +"</p>");
+			for(var i = 0; i<lists.length; i++){
+				$("p[class='log']").append("<p> List " + (i+1) + ": " 
+					+ algsList[iAlg].sortedLists[i] +" t = " + algsList[iAlg].sortingTimes[i] + "</p>");
+			}
+		}
+	},
+
+	// clears printed log
+	clear: function(){
+		$("p[class='log']").html("");	
+	}
+
 };
 
 
 octopus.init();
-/*
-alert(algModel.algsList[0].name);
-
-alert(algModel.algsList[0].alg([3,4,1]));*/
